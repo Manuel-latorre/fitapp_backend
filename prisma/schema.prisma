@@ -1,0 +1,187 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  phone           String?
+  profile_picture String?
+  password        String
+  role            String
+  created_at      DateTime  @default(now())
+
+  plans           Plan[]
+  weekProgressionsCreated WeekProgression[] @relation("CreatedBy")
+
+  refreshTokens RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("users")
+}
+
+model Plan {
+  id                 String    @id @default(uuid())
+  user_id            String
+  name               String
+  description        String?
+  start_date         DateTime
+  end_date           DateTime?
+  current_week_number Int      @default(1)
+  status             String    @default("active")
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @default(now())
+
+  user               User      @relation(fields: [user_id], references: [id])
+  weeks              Week[]
+  weekProgressions   WeekProgression[]
+
+  @@index([user_id, status], name: "idx_user_active_plans")
+  @@map("plans")
+}
+
+model Week {
+  id                 String     @id @default(uuid())
+  plan_id            String
+  week_number        Int
+  title              String?
+  notes              String?
+  is_template        Boolean    @default(false)
+  copied_from_week_id String?  // Self-reference
+  status             String     @default("planned")
+  created_at         DateTime   @default(now())
+  updated_at         DateTime   @default(now())
+
+  plan               Plan       @relation(fields: [plan_id], references: [id])
+  copied_from_week   Week?      @relation("CopiedFrom", fields: [copied_from_week_id], references: [id])
+  copied_weeks       Week[]     @relation("CopiedFrom")
+  sessions           Session[]
+  progressionsFrom   WeekProgression[] @relation("FromWeek")
+  progressionsTo     WeekProgression[] @relation("ToWeek")
+
+  @@index([plan_id, week_number], name: "idx_plan_weeks")
+  @@map("weeks")
+}
+
+model Session {
+  id                String    @id @default(uuid())
+  week_id           String
+  session_number    Int
+  title             String
+  notes             String?
+  completed         Boolean   @default(false)
+  completion_date   DateTime?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now())
+
+  week              Week      @relation(fields: [week_id], references: [id])
+  blocks            Block[]
+
+  @@index([week_id, session_number], name: "idx_week_sessions")
+  @@map("sessions")
+}
+
+model Block {
+  id                String    @id @default(uuid())
+  session_id        String
+  block_number      Int
+  title             String
+  notes             String?
+  created_at        DateTime  @default(now())
+
+  session           Session   @relation(fields: [session_id], references: [id])
+  exercises         Exercise[]
+
+  @@index([session_id, block_number], name: "idx_session_blocks")
+  @@map("blocks")
+}
+
+model Exercise {
+  id                String    @id @default(uuid())
+  block_id          String
+  exercise_number   Int
+  name              String
+  link              String?
+  series            Int?
+  reps              String?
+  kg                Decimal?  @db.Decimal(5, 2)
+  rest_seconds      Int?
+  pse               String?
+  rir               String?
+  observations      String?
+
+  completed         Boolean   @default(false)
+  actual_series     Int?
+  actual_reps       String?
+  actual_kg         Decimal?  @db.Decimal(5, 2)
+  actual_pse        String?
+  actual_rir        String?
+  completion_notes  String?
+
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now())
+
+  block             Block     @relation(fields: [block_id], references: [id])
+
+  @@index([block_id, exercise_number], name: "idx_block_exercises")
+  @@map("exercises")
+}
+
+model WeekProgression {
+  id                String   @id @default(uuid())
+  plan_id           String
+  from_week_id      String
+  to_week_id        String
+  progression_notes String?
+  created_at        DateTime @default(now())
+  created_by        String
+
+  plan              Plan     @relation(fields: [plan_id], references: [id])
+  from_week         Week     @relation("FromWeek", fields: [from_week_id], references: [id])
+  to_week           Week     @relation("ToWeek", fields: [to_week_id], references: [id])
+  createdBy         User     @relation("CreatedBy", fields: [created_by], references: [id])
+
+  @@map("week_progressions")
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  token      String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  revoked    Boolean  @default(false)
+}
+
+model PasswordResetToken {
+  id         String   @id @default(uuid())
+  token      String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+}
+
+model Invitation {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  phone     String
+  is_new    String   @default("true")
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  token     String?  @unique
+}
