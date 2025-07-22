@@ -1,98 +1,79 @@
+# FitApp Backend -- En progreso
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="/public/nestjs-logo-small.png" width="120" alt="Nest Logo" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend desarrollado con [NestJS](https://nestjs.com/) y [Prisma](https://www.prisma.io/) para la gestión de usuarios, autenticación y planes de entrenamiento.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+---
+
+<p align="center">
+  <img src="/public/hero-background.png" alt="Hero Background" style="width:100%; height:auto; max-height: 400px; object-fit: cover; border-radius: 8px;">
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+<div align="center">
+  <h1>FitApp Backend</h1>
+  <p>
+    Una API RESTful robusta y escalable construida con NestJS y Prisma para potenciar tu aplicación de fitness.
+  </p>
+  <br />
+  <p>
+    <a href="#descripción" style="padding: 10px 20px; background-color: #E00052; color: white; text-decoration: none; border-radius: 25px; font-weight: bold;">
+      🚀 Ver Documentación
+    </a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="https://github.com/tu-usuario/fitapp_backend" target="_blank" style="padding: 10px 20px; border: 2px solid #333; color: #333; text-decoration: none; border-radius: 25px; font-weight: bold;">
+      <img src="https://img.icons8.com/material-outlined/24/000000/github.png" alt="GitHub icon" style="vertical-align: middle; margin-right: 5px; filter: invert(100%);" width="16" height="16">
+      Código Fuente
+    </a>
+  </p>
+</div>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## Descripción
 
-## Compile and run the project
+FitApp Backend es la columna vertebral de tu aplicación de fitness, ofreciendo una API RESTful potente y modular. Construido con el framework progresivo [NestJS](https://nestjs.com/) y el moderno ORM [Prisma](https://www.prisma.io/), este backend está diseñado para ser eficiente, confiable y escalable.
 
-```bash
-# development
-$ npm run start
+<div align="center">
+  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 30px;">
+    <div style="flex-basis: 30%; min-width: 250px; padding: 20px; text-align: center;">
+      <img src="/public/icon-users.png" alt="User Management Icon" width="60" height="60" style="margin-bottom: 10px;">
+      <h3 style="margin-top: 0;">Gestión de Usuarios</h3>
+      <p>Administra perfiles de usuario, roles y preferencias con un sistema robusto y seguro.</p>
+    </div>
+    <div style="flex-basis: 30%; min-width: 250px; padding: 20px; text-align: center;">
+      <img src="/public/icon-lock.png" alt="Authentication Icon" width="60" height="60" style="margin-bottom: 10px;">
+      <h3 style="margin-top: 0;">Autenticación Segura</h3>
+      <p>Implementa un sistema de autenticación completo (JWT) para proteger tus rutas y datos.</p>
+    </div>
+    <div style="flex-basis: 30%; min-width: 250px; padding: 20px; text-align: center;">
+      <img src="/public/icon-training.png" alt="Training Plans Icon" width="60" height="60" style="margin-bottom: 10px;">
+      <h3 style="margin-top: 0;">Planes de Entrenamiento</h3>
+      <p>Define y gestiona planes de entrenamiento personalizados y sus progresiones para los usuarios.</p>
+    </div>
+  </div>
+</div>
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+## Estructura del Proyecto
 
-## Run tests
+El proyecto sigue una estructura modular, facilitando la organización y escalabilidad:
 
-```bash
-# unit tests
-$ npm run test
+\`\`\`
+fitapp_backend/
+├── src/
+│   ├── modules/
+│   │   ├── auth/          # Módulo de Autenticación y Registro de usuarios
+│   │   ├── users/         # Módulo de Gestión de Usuarios (CRUD, perfiles)
+│   │   └── plans/         # Módulo de Gestión de Planes de Entrenamiento
+│   └── prisma.service.ts  # Servicio global para interactuar con Prisma
+├── prisma/                # Esquema de la base de datos y archivos de migraciones
+├── test/                  # Pruebas End-to-End (e2e)
+├── docker-compose.yml     # Configuración de servicios de Docker (ej. base de datos)
+└── ...                    # Otros archivos de configuración (package.json, tsconfig.json, etc.)
+\`\`\`
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
