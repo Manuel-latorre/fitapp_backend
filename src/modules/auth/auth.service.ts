@@ -72,27 +72,65 @@ export class AuthService {
             throw new BadRequestException('El email ya está registrado como usuario.');
         }
 
-        // 2. Crear un token único y expiración (ej: 48h)
+        // 2. Verificar si ya existe una invitación para este email
+        const existingInvitation = await this.prisma.invitation.findUnique({
+            where: { email: invite.email },
+        });
+
+        // 3. Verificar si la invitación existente ha expirado o ya fue usada
+        if (existingInvitation) {
+            const now = new Date();
+            const isExpired = existingInvitation.expiresAt < now;
+            const isUsed = existingInvitation.used;
+
+            if (!isExpired && !isUsed) {
+                throw new BadRequestException(
+                    'Ya existe una invitación válida para este email. ' +
+                    'La invitación expira el ' + existingInvitation.expiresAt.toLocaleString() + '. ' +
+                    'Solo se puede re-enviar una invitación después de que expire o sea utilizada.'
+                );
+            }
+        }
+
+        // 4. Crear un token único y expiración (ej: 48h)
         const token = randomBytes(32).toString('hex');
         const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 48); // 48 horas
 
-        // 3. Crear la invitación en la base de datos (ahora con token)
-        const invitation = await this.prisma.invitation.create({
-            data: {
-                email: invite.email,
-                name: invite.name,
-                phone: invite.phone,
-                is_new: invite.is_new ?? 'true',
-                role: invite.role ?? 'user',
-                createdAt: new Date(),
-                expiresAt,
-                used: false,
-                token,
-            },
-        });
+        let invitation;
+        
+        if (existingInvitation) {
+            // Si ya existe una invitación pero ha expirado o fue usada, actualizarla
+            invitation = await this.prisma.invitation.update({
+                where: { email: invite.email },
+                data: {
+                    name: invite.name,
+                    phone: invite.phone,
+                    is_new: invite.is_new ?? 'true',
+                    role: invite.role ?? 'user',
+                    expiresAt,
+                    used: false,
+                    token,
+                },
+            });
+        } else {
+            // Si no existe, crear una nueva
+            invitation = await this.prisma.invitation.create({
+                data: {
+                    email: invite.email,
+                    name: invite.name,
+                    phone: invite.phone,
+                    is_new: invite.is_new ?? 'true',
+                    role: invite.role ?? 'user',
+                    createdAt: new Date(),
+                    expiresAt,
+                    used: false,
+                    token,
+                },
+            });
+        }
 
         // 4. Generar el magic link (ajusta la URL base según tu frontend)
-        const magicLink = `https://tu-frontend.com/registro?token=${token}&email=${encodeURIComponent(invite.email)}&name=${encodeURIComponent(invite.name)}&phone=${encodeURIComponent(invite.phone)}&isNew=${invite.is_new ?? 'true'}`;
+        const magicLink = `${process.env.FRONTEND_URL}/registro?token=${token}&email=${encodeURIComponent(invite.email)}&name=${encodeURIComponent(invite.name)}&phone=${encodeURIComponent(invite.phone)}&isNew=${invite.is_new ?? 'true'}`;
 
         // 5. Enviar el magic link por email usando Resend
         const resend = new Resend(process.env.RESEND_API_KEY);
@@ -239,7 +277,7 @@ export class AuthService {
         });
 
         // 4. Enviar email con el link de reseteo (ajusta la URL base)
-        const resetLink = `https://tu-frontend.com/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`;
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`;
         const resend = new Resend(process.env.RESEND_API_KEY);
         try {
             await resend.emails.send({
